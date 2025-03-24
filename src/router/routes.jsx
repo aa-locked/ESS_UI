@@ -1,10 +1,9 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import Counter from '../pages/Counter';
-import Todo from '../pages/Todo';
 import App from '../App'
 import Dashboard from '../pages/admin/Dashboard';
-import Login from '../pages/auth/Login';
+import Login from '../pages/auth/login/Login';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
