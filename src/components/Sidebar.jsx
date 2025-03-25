@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { navRoutes } from '../utils/navRoutes';
 import { NavLink } from 'react-router-dom';
+import {  Modal,  Button } from "@mui/material";
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -98,7 +99,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Sidebar({children}) {
+export default function Sidebar({ children }) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -109,7 +110,8 @@ export default function Sidebar({children}) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
+    const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -127,11 +129,40 @@ export default function Sidebar({children}) {
                             open && { display: 'none' },
                         ]}
                     >
-                        <MenuIcon />
+                        <img src="/Bicpl_logo.png" alt="Logo" style={{ width: "50px" }} />
+
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Mini variant drawer
-                    </Typography>
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+                        <Typography variant="h4" noWrap component="div">
+                            Employee Self Service
+                        </Typography>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "right", alignItems: "right", gap: "8px", cursor: "pointer" }} onClick={handleOpen}>
+                        <AccountCircleIcon />
+                    </div>
+                    <Modal open={open} onClose={handleClose}>
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                width: 300,
+                                bgcolor: "white",
+                                boxShadow: 24,
+                                p: 4,
+                                borderRadius: 2,
+                                textAlign: "center",
+                            }}
+                        >
+                            <Typography variant="h6">User Login Details</Typography>
+                            <Typography variant="body1">Username: johndoe</Typography>
+                            <Typography variant="body1">Email: johndoe@example.com</Typography>
+                            <Button onClick={handleClose} variant="contained" color="primary" sx={{ mt: 2 }}>
+                                Close
+                            </Button>
+                        </Box>
+                    </Modal>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -201,7 +232,7 @@ export default function Sidebar({children}) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                 {children}
+                {children}
             </Box>
         </Box>
     );

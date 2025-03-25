@@ -4,15 +4,7 @@
     box-sizing: border-box;
     font-family:'Poppins' sans-serif;
 }
-.active{
-    content: 'Hello World';
-}
-.login{
-    content: 'Hello World';
-}
-.register{
-    content: 'Hello World';
-}
+
 .body {
     display: flex;
     justify-content: center;

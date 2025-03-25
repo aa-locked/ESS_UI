@@ -1,72 +1,112 @@
 import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import styles from "./Login.module.css";
 import { FaUser, FaLock, FaGoogle, FaEnvelope, FaFacebookF, FaGithub, FaLinkedin } from "react-icons/fa";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [isActive, setIsActive] = useState(false);
+  const nevigate= useNavigate();
+  const handleRegClick = () => setIsActive(true);
+  const handleLoginClick = () => setIsActive(false);
 
-  const handleRegClick = () => {
-    setIsActive(true);
-  };
+  const loginValidationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    password: Yup.string().required("Password is required")
+  });
 
-  const handleLoginClick = () => {
-    setIsActive(false);
-  };
+  const registerValidationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    password: Yup.string().required("Password is required")
+  });
+  const onloginSUbmit=(values)=>{
+    let formData = {
+      username: 'emilys',
+      password: 'emilyspass'
+    };
+    axios.post("https://dummyjson.com/auth/login", formData)
+      .then(res => {
+        console.log(res)
+        localStorage.setItem("user", JSON.stringify(res.data))
+        localStorage.setItem("token", JSON.stringify(res.data.accessToken))
+        nevigate("/");
+      })
+      .catch(err => console.log(err))
 
+  }
   return (
     <div className={styles.body}>
       <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
         {/* Login Form */}
         <div className={`${styles.formBox} ${styles.login}`}>
-          <form action="">
-            <h1>Login</h1>
-            <div className={styles.input_box}>
-              <input type='text' placeholder='Username' required />
-              <FaUser className={styles.i} />
-            </div>
-            <div className={styles.input_box}>
-              <input type='password' placeholder='Password' required />
-              <FaLock className={styles.i} />
-            </div>
-            <div className={styles.forgot_link}>
-              <a href='#'>Forget Password?</a>
-            </div>
-            <button type='submit' className={styles.btn}>Login</button>
-            <p>Or login with social platform</p>
-            <div className={styles.social_icons}>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaFacebookF /></a>
-              <a href='#'><FaGithub /></a>
-              <a href='#'><FaLinkedin /></a>
-            </div>
-          </form>
+          <Formik
+            initialValues={{ username: '', password: '' }}
+            validationSchema={loginValidationSchema}
+            onSubmit={(values) => onloginSUbmit(values)}
+          >
+            <Form>
+              <h1>Login</h1>
+              <div className={styles.input_box}>
+                <Field type='text' name='username' placeholder='Username' required/>
+                <FaUser className={styles.i} />
+              </div>
+              <div className={styles.input_box}>
+                <Field type='password' name='password' placeholder='Password' required/>
+                <FaLock className={styles.i} />
+              </div>
+              <div className={styles.forgot_link}><a href='#'>Forget Password?</a></div>
+              <button type='submit' className={styles.btn}>Login</button>
+              <p>Or login with social platform</p>
+              <div className={styles.social_icons}>
+                <a href='#'><FaGoogle /></a>
+                <a href='#'><FaFacebookF /></a>
+                <a href='#'><FaGithub /></a>
+                <a href='#'><FaLinkedin /></a>
+              </div>
+            </Form>
+          </Formik>
         </div>
 
         {/* Registration Form */}
         <div className={`${styles.formBox} ${styles.register}`}>
-          <form action="">
-            <h1>Registration</h1>
-            <div className={styles.input_box}>
-              <input type='text' placeholder='Username' required />
-              <FaUser className={styles.i} />
-            </div>
-            <div className={styles.input_box}>
-              <input type='email' placeholder='Email' required />
-              <FaEnvelope className={styles.i} />
-            </div>
-            <div className={styles.input_box}>
-              <input type='password' placeholder='Password' required />
-              <FaLock className={styles.i} />
-            </div>
-            <button type='submit' className={styles.btn}>Register</button>
-            <p>Or register with social platform</p>
-            <div className={styles.social_icons}>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaFacebookF /></a>
-              <a href='#'><FaGithub /></a>
-              <a href='#'><FaLinkedin /></a>
-            </div>
-          </form>
+          <Formik
+            initialValues={{ username: '', email: '', password: '' }}
+            validationSchema={registerValidationSchema}
+            onSubmit={(values) => console.log(values)}
+          >
+            <Form>
+              <h1>Registration</h1>             
+
+              <div className={styles.input_box}>
+                <Field type='text' name='username' placeholder='Username' required />
+                <FaUser className={styles.i} />
+
+              </div>
+              <div className={styles.input_box}>
+                <Field type='email' name='email' placeholder='Email' required />
+                <FaEnvelope className={styles.i} />
+
+              </div>
+              <div className={styles.input_box}>
+                <Field type='password' name='password' placeholder='Password' required />
+                <FaLock className={styles.i} />
+
+              </div>
+              <div className={styles.error_box}>
+              </div>
+              <button type='submit' className={styles.btn}>Register</button>
+              <p>Or register with social platform</p>
+              <div className={styles.social_icons}>
+                <a href='#'><FaGoogle /></a>
+                <a href='#'><FaFacebookF /></a>
+                <a href='#'><FaGithub /></a>
+                <a href='#'><FaLinkedin /></a>
+              </div>
+            </Form>
+          </Formik>
         </div>
 
         {/* Toggle Panel */}
@@ -74,7 +114,6 @@ const Login = () => {
           <div className={`${styles.toggle_panel} ${styles.toggle_left}`}>
             <img src="/Bicpl_logo.png" alt="Logo" className={styles.logo} />
             <h1>Hello, Welcome</h1>
-
             <p>Don't have an account?</p>
             <button className={styles.btn} onClick={handleRegClick}>Register</button>
           </div>
