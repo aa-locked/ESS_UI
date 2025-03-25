@@ -2,9 +2,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family:'Poppins' sans-serif;
 }
-
+.active{
+    content: 'Hello World';
+}
+.login{
+    content: 'Hello World';
+}
+.register{
+    content: 'Hello World';
+}
 .body {
     display: flex;
     justify-content: center;
@@ -42,11 +50,12 @@
     right: 50%;
 }
 .formBox.register {
-    visibility: visible;
+    visibility: hidden;
 
 }
 .container.active .formBox.register{
     right: 50%;
+    visibility: visible;
 }
 form {
     width: 100%;
@@ -59,9 +68,12 @@ form {
 
 .input_box {
     position: relative;
-    margin: 60px 0;
+    margin: 30px 0;
 }
-
+.logo {
+  width: 100px; /* Adjust size as needed */
+  margin-bottom: 30px;
+}
 .input_box input {
     width: 100%;
     padding: 13px 50px 13px 20px;
@@ -93,7 +105,7 @@ form {
     margin: -15px 0 15px;
 }
 
-.forgot_link a {
+.forgot_link a{
     font-size: 14.5px;
     color: #333;
     text-decoration: none;
@@ -112,7 +124,7 @@ form {
     font-weight: 600;
 }
 
-.container p {
+.container p{
     font-size: 14.5px;
     margin: 15px 0;
 }
@@ -175,7 +187,7 @@ form {
     left: -50%;
     transition-delay: .6s;
 }
-changes
+
 .toggle_panel.toggle_right {
     right: -50%;
     transition-delay: .6s;
@@ -237,8 +249,7 @@ changes
         bottom: -30%;
     }
     .container.active .toggle_panel.toggle_right{
-        bottom: 0;
-        top: -30%;
+        bottom: 0;        
     }
 }
 @media screen and (max-width:400px) {

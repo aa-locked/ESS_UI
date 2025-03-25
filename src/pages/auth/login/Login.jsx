@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from "./Login.module.css";
-import { FaUser, FaLock, FaGoogle, FaEnvelope } from "react-icons/fa";
+import { FaUser, FaLock, FaGoogle, FaEnvelope, FaFacebookF, FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Login = () => {
   const [isActive, setIsActive] = useState(false);
@@ -35,9 +35,9 @@ const Login = () => {
             <p>Or login with social platform</p>
             <div className={styles.social_icons}>
               <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
+              <a href='#'><FaFacebookF /></a>
+              <a href='#'><FaGithub /></a>
+              <a href='#'><FaLinkedin /></a>
             </div>
           </form>
         </div>
@@ -62,9 +62,9 @@ const Login = () => {
             <p>Or register with social platform</p>
             <div className={styles.social_icons}>
               <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
-              <a href='#'><FaGoogle /></a>
+              <a href='#'><FaFacebookF /></a>
+              <a href='#'><FaGithub /></a>
+              <a href='#'><FaLinkedin /></a>
             </div>
           </form>
         </div>
@@ -72,11 +72,14 @@ const Login = () => {
         {/* Toggle Panel */}
         <div className={styles.toggle_box}>
           <div className={`${styles.toggle_panel} ${styles.toggle_left}`}>
+            <img src="/Bicpl_logo.png" alt="Logo" className={styles.logo} />
             <h1>Hello, Welcome</h1>
+
             <p>Don't have an account?</p>
             <button className={styles.btn} onClick={handleRegClick}>Register</button>
           </div>
           <div className={`${styles.toggle_panel} ${styles.toggle_right}`}>
+            <img src="/Bicpl_logo.png" alt="Logo" className={styles.logo} />
             <h1>Welcome Back!</h1>
             <p>Already have an account?</p>
             <button className={styles.btn} onClick={handleLoginClick}>Login</button>
