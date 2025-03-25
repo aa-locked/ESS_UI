@@ -1,27 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react';
 import styles from "./Login.module.css";
-import { FaUser } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
-import { FaEnvelope } from "react-icons/fa";
+import { FaUser, FaLock, FaGoogle, FaEnvelope } from "react-icons/fa";
 
 const Login = () => {
-  useEffect(() => {
-    const container = document.querySelector(`.${styles.container}`);
-    const registerBtn = document.querySelector(`.${styles.register_btn}`);
-    const loginBtn = document.querySelector(`.${styles.login_btn}`);
-    registerBtn.addEventListener('click',()=>{
-      container.classList.add('active');
-    });
-    loginBtn.addEventListener('click',()=>{
-      container.classList.remove('active');
-    });
+  const [isActive, setIsActive] = useState(false);
 
-  }, []);
+  const handleRegClick = () => {
+    setIsActive(true);
+  };
+
+  const handleLoginClick = () => {
+    setIsActive(false);
+  };
 
   return (
     <div className={styles.body}>
-      <div className={styles.container}>
+      <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
+        {/* Login Form */}
         <div className={`${styles.formBox} ${styles.login}`}>
           <form action="">
             <h1>Login</h1>
@@ -47,6 +42,7 @@ const Login = () => {
           </form>
         </div>
 
+        {/* Registration Form */}
         <div className={`${styles.formBox} ${styles.register}`}>
           <form action="">
             <h1>Registration</h1>
@@ -72,21 +68,23 @@ const Login = () => {
             </div>
           </form>
         </div>
+
+        {/* Toggle Panel */}
         <div className={styles.toggle_box}>
           <div className={`${styles.toggle_panel} ${styles.toggle_left}`}>
             <h1>Hello, Welcome</h1>
             <p>Don't have an account?</p>
-            <button className={`${styles.btn} ${styles.register_btn}`}>Register</button>
+            <button className={styles.btn} onClick={handleRegClick}>Register</button>
           </div>
           <div className={`${styles.toggle_panel} ${styles.toggle_right}`}>
             <h1>Welcome Back!</h1>
             <p>Already have an account?</p>
-            <button className={`${styles.btn} ${styles.login_btn}`}>Login</button>
+            <button className={styles.btn} onClick={handleLoginClick}>Login</button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
