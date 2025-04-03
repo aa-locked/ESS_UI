@@ -8,9 +8,15 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [isActive, setIsActive] = useState(false);
-  const nevigate= useNavigate();
+  const [message, setMessage] = useState("");
+  const [errmessage, seterrMessage] = useState([]);
+  const nevigate = useNavigate();
   const handleRegClick = () => setIsActive(true);
-  const handleLoginClick = () => setIsActive(false);
+  const handleLoginClick = () => {
+    setIsActive(false);
+    setMessage("");
+    seterrMessage([]);
+  };
 
   const loginValidationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -22,12 +28,12 @@ const Login = () => {
     email: Yup.string().email("Invalid email format").required("Email is required"),
     password: Yup.string().required("Password is required")
   });
-  const onloginSUbmit=(values)=>{
+  const onloginSUbmit = (values) => {
     let formData = {
-      username: 'emilys',
-      password: 'emilyspass'
+      userName: values.username,
+      password: values.password
     };
-    axios.post("https://dummyjson.com/auth/login", formData)
+    axios.post("https://localhost:7032/api/auth/login", formData)
       .then(res => {
         console.log(res)
         localStorage.setItem("user", JSON.stringify(res.data))
@@ -35,6 +41,20 @@ const Login = () => {
         nevigate("/");
       })
       .catch(err => console.log(err))
+
+  }
+  const onRegSubmit = (values) => {
+    let formData = {
+      username: values.username,
+      email: values.email,
+      password: values.password
+    };
+    axios.post("https://localhost:7032/api/auth/register", formData)
+      .then(res => {
+        console.log(res);
+        setMessage(res.data.message);
+      })
+      .catch(err => seterrMessage(err.response.data))
 
   }
   return (
@@ -50,11 +70,11 @@ const Login = () => {
             <Form>
               <h1>Login</h1>
               <div className={styles.input_box}>
-                <Field type='text' name='username' placeholder='Username' required/>
+                <Field type='text' name='username' placeholder='Username' required />
                 <FaUser className={styles.i} />
               </div>
               <div className={styles.input_box}>
-                <Field type='password' name='password' placeholder='Password' required/>
+                <Field type='password' name='password' placeholder='Password' required />
                 <FaLock className={styles.i} />
               </div>
               <div className={styles.forgot_link}><a href='#'>Forget Password?</a></div>
@@ -75,10 +95,12 @@ const Login = () => {
           <Formik
             initialValues={{ username: '', email: '', password: '' }}
             validationSchema={registerValidationSchema}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values, { resetForm }) => {
+              onRegSubmit(values); resetForm();
+            }}
           >
             <Form>
-              <h1>Registration</h1>             
+              <h1>Registration</h1>
 
               <div className={styles.input_box}>
                 <Field type='text' name='username' placeholder='Username' required />
@@ -99,6 +121,14 @@ const Login = () => {
               </div>
               <button type='submit' className={styles.btn}>Register</button>
               <p>Or register with social platform</p>
+              {message && <p style={{ color: "green" }}>{message}</p>}
+              {errmessage.length > 0 && (
+                <>
+                  {errmessage.map((err, index) => (
+                    <span style={{ color: "red" ,fontSize:"12px"}} key={index}>{err.description}</span>
+                  ))}
+                </>
+              )}  
               <div className={styles.social_icons}>
                 <a href='#'><FaGoogle /></a>
                 <a href='#'><FaFacebookF /></a>
