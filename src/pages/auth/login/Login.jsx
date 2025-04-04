@@ -30,9 +30,10 @@ const Login = () => {
     password: Yup.string().required('Password is required'),
   });
 
-  const onLoginSubmit = (values) => {
+  const onLoginSubmit = async  (values) => {
     const formData = { username: values.username, password: values.password };
-    dispatch(loginUser(formData));
+    await dispatch(loginUser(formData)).unwrap(); // unwrap gives you the resolved value or throws an error
+      navigate("/");
   };
 
   const onRegSubmit = (values, { resetForm }) => {
@@ -44,12 +45,7 @@ const Login = () => {
   if (loading) {
     // You can add a loading spinner or something to indicate loading
     return <div>Loading...</div>;
-  }
-
-  if (message) {
-    // You can display a success message for registration
-    return <div style={{ color: 'green' }}>{message}</div>;
-  }
+  } 
 
   return (
     <div className={styles.body}>
@@ -121,6 +117,7 @@ const Login = () => {
                 Register
               </button>
               <p>Or register with social platform</p>
+              {message && <div style={{ color: 'green' }}>{message}</div>}
               {error && <p style={{ color: 'red' }}>{error.description}</p>}
               <div className={styles.social_icons}>
                 <a href="#">

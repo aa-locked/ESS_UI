@@ -19,6 +19,7 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (formData, { rejectWithValue }) => {
+    console.log(formData)
     try {
       const response = await axios.post('https://localhost:7032/api/auth/register', formData);
       return response.data;
@@ -53,9 +54,11 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.accessToken;
-        localStorage.setItem('user', JSON.stringify(action.payload.user));
-        localStorage.setItem('token', JSON.stringify(action.payload.accessToken));
+        state.token = action.payload.token;
+        console.log(state)
+        console.log(action)
+        // localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', JSON.stringify(action.payload.token));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
