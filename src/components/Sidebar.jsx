@@ -17,8 +17,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { navRoutes } from '../utils/navRoutes';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useNavigate  } from 'react-router-dom';
 import {  Modal,  Button } from "@mui/material";
+import {  useSelector,useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -102,7 +104,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Sidebar({ children }) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const userData = useSelector((state) => state.auth.user);
+    console.log(userData);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -112,6 +118,13 @@ export default function Sidebar({ children }) {
     };
     const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch the logout action
+    handleModalClose(); // Close the modal
+    navigate('/login'); // Redirect to login page (or home page)
+};
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -137,10 +150,10 @@ export default function Sidebar({ children }) {
                             Employee Self Service
                         </Typography>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "right", alignItems: "right", gap: "8px", cursor: "pointer" }} onClick={handleOpen}>
+                    <div style={{ display: "flex", justifyContent: "right", alignItems: "right", gap: "8px", cursor: "pointer" }} onClick={handleModalOpen}>
                         <AccountCircleIcon />
                     </div>
-                    <Modal open={open} onClose={handleClose}>
+                    <Modal open={modalOpen} onClose={handleModalClose}>
                         <Box
                             sx={{
                                 position: "absolute",
@@ -156,10 +169,14 @@ export default function Sidebar({ children }) {
                             }}
                         >
                             <Typography variant="h6">User Login Details</Typography>
-                            <Typography variant="body1">Username: johndoe</Typography>
-                            <Typography variant="body1">Email: johndoe@example.com</Typography>
-                            <Button onClick={handleClose} variant="contained" color="primary" sx={{ mt: 2 }}>
+                            <Typography variant="body1">User Code: {userData?.userCode}</Typography>
+                            <Typography variant="body1">First Name: {userData?.firstName}</Typography>
+                            <Typography variant="body1">Last Name:  {userData?.lastName}</Typography>
+                            <Button onClick={handleModalClose} variant="contained" color="primary" sx={{ mt: 2 }}>
                                 Close
+                            </Button>
+                            <Button onClick={handleLogout} variant="contained" color="error" sx={{ mt: 2 }}>
+                                Logout
                             </Button>
                         </Box>
                     </Modal>

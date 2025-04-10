@@ -10,6 +10,7 @@ import { FaUser, FaLock, FaGoogle, FaEnvelope, FaFacebookF, FaGithub, FaLinkedin
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [loginError, setLoginError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { message, error, loading } = useSelector((state) => state.auth);
@@ -32,8 +33,14 @@ const Login = () => {
 
   const onLoginSubmit = async  (values) => {
     const formData = { username: values.username, password: values.password };
-    await dispatch(loginUser(formData)).unwrap(); // unwrap gives you the resolved value or throws an error
-      navigate("/");
+    try {
+      await dispatch(loginUser(formData)).unwrap();
+      navigate("/"); // success
+    } catch (err) {
+      // This will catch the error from `rejectWithValue`
+      console.error("Login error:", err);
+      setLoginError(err?.message || "Login failed. Please try again.");
+    }
   };
 
   const onRegSubmit = (values, { resetForm }) => {
@@ -74,6 +81,7 @@ const Login = () => {
                 Login
               </button>
               <p>Or login with social platform</p>
+              {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
               <div className={styles.social_icons}>
                 <a href="#">
                   <FaGoogle />
